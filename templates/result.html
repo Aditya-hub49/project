@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Break-Even Calculation - FinTrackr{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 600px; margin: 0 auto;">
+    <h1 class="text-center">Break-Even Calculation</h1>
+    
+    {% if q2 is not none %}
+        <div style="background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 4px; padding: 1.5rem; margin-bottom: 2rem;">
+            <h2 style="color: #155724; margin-top: 0;">Result</h2>
+            
+            <div style="margin-top: 1rem;">
+                <p style="margin-bottom: 1rem;">
+                    <strong>Stock:</strong> {{ stock.stock_name }}
+                </p>
+                <p style="margin-bottom: 1rem;">
+                    <strong>Current Holdings:</strong> {{ stock.quantity }} shares @ ${{ stock.buy_price|round(2) }}
+                </p>
+                <p style="margin-bottom: 1rem;">
+                    <strong>Target Average Price:</strong> ${{ p_target }}
+                </p>
+                
+                <div style="background-color: white; padding: 1rem; border-radius: 4px; margin-top: 1.5rem;">
+                    <p style="font-size: 1.2rem; color: #155724;">
+                        <strong>To reach your target average price of ${{ p_target }}, you need to buy:</strong>
+                    </p>
+                    <p style="font-size: 2rem; color: #28a745; font-weight: bold; text-align: center; margin-top: 1rem;">
+                        {{ q2|round(2) }} shares
+                    </p>
+                    <p style="color: #666; text-align: center; margin-top: 1rem; font-size: 0.9rem;">
+                        at the current market price of ${{ stock.current_price|round(2) }}
+                    </p>
+                </div>
+                
+                <p style="margin-top: 1.5rem; color: #666; font-style: italic;">
+                    This calculation assumes you buy {{ q2|round(2) }} additional shares at the current price of ${{ stock.current_price|round(2) }} per share.
+                </p>
+            </div>
+        </div>
+        
+        <div style="text-align: center;">
+            <a href="{{ url_for('portfolio') }}" class="btn">Back to Portfolio</a>
+            <a href="{{ url_for('manage_loss') }}" class="btn" style="margin-left: 1rem; background-color: #17a2b8;">Back to Manage Loss</a>
+        </div>
+    {% else %}
+        <div style="background-color: #f8d7da; border: 1px solid #f5c6cb; border-radius: 4px; padding: 1.5rem; text-align: center;">
+            <h2 style="color: #721c24; margin-top: 0;">Invalid Calculation</h2>
+            <p style="color: #721c24; margin-top: 1rem;">
+                The target price must be higher than your current buy price but lower than the current market price. Please try again.
+            </p>
+            <a href="{{ url_for('manage_loss') }}" class="btn" style="margin-top: 1rem;">Back to Manage Loss</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

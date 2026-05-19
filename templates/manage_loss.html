@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Loss - FinTrackr{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Manage Losing Stocks</h1>
+    <p style="color: #666; margin-bottom: 1.5rem;">
+        These stocks are currently at a loss. You can calculate how many more shares to buy to reach your target average price.
+    </p>
+    
+    {% if losing_stocks %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Stock</th>
+                    <th>Quantity</th>
+                    <th>Buy Price</th>
+                    <th>Current Price</th>
+                    <th>Loss Per Share</th>
+                    <th>Total Loss</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stock in losing_stocks %}
+                    <tr>
+                        <td><strong>{{ stock.stock_name }}</strong></td>
+                        <td>{{ stock.quantity }}</td>
+                        <td>${{ stock.buy_price|round(2) }}</td>
+                        <td>${{ stock.current_price|round(2) }}</td>
+                        <td class="loss">${{ (stock.buy_price - stock.current_price)|round(2) }}</td>
+                        <td class="loss">${{ ((stock.buy_price - stock.current_price) * stock.quantity)|round(2) }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('calculate_break_even') }}" style="display: inline;">
+                                <input type="hidden" name="stock_id" value="{{ stock.id }}">
+                                <input type="number" name="p_target" placeholder="Target Price" step="0.01" min="{{ stock.current_price }}" max="{{ stock.buy_price }}" required style="width: 120px; padding: 0.5rem;">
+                                <input type="submit" value="Calculate" style="padding: 0.5rem 1rem; width: auto;">
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div style="text-align: center; padding: 3rem; background-color: #f8f9fa; border-radius: 4px;">
+            <p style="font-size: 1.2rem; color: #666;">🎉 Great news! You have no losing stocks.</p>
+            <p style="color: #999; margin-top: 0.5rem;">All your stocks are performing well or at breakeven.</p>
+            <a href="{{ url_for('portfolio') }}" class="btn" style="margin-top: 1.5rem;">Back to Portfolio</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

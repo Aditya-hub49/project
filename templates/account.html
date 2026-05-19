@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Account - FinTrackr{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 600px; margin: 0 auto;">
+    <h1>Account Settings</h1>
+    
+    <div style="background-color: #f8f9fa; padding: 1.5rem; border-radius: 4px; margin-bottom: 2rem;">
+        <h2 style="color: #333;">Account Information</h2>
+        <p style="margin-top: 1rem;"><strong>Username:</strong> {{ current_user.username }}</p>
+    </div>
+    
+    <h2 style="color: #dc3545; margin-top: 2rem;">Danger Zone</h2>
+    <p style="color: #666; margin-bottom: 1rem;">
+        Deleting your account is permanent and will remove all your stocks and data. This action cannot be undone.
+    </p>
+    
+    <form method="POST" action="{{ url_for('delete_account') }}" style="display: inline;">
+        <input 
+            type="submit" 
+            value="Delete Account" 
+            class="btn btn-danger" 
+            onclick="return confirm('Are you absolutely sure? This will permanently delete your account and all associated data. Type your username to confirm.')"
+        >
+    </form>
+    
+    <a href="{{ url_for('portfolio') }}" class="btn" style="margin-left: 1rem;">Back to Portfolio</a>
+</div>
+{% endblock %}

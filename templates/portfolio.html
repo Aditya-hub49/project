@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Portfolio - FinTrackr{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Your Stock Portfolio</h1>
+    
+    <h2 style="margin-top: 2rem;">Add Stock</h2>
+    <form method="POST" style="background-color: #f8f9fa; padding: 1.5rem; border-radius: 4px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+                <label for="stock_name">Stock Symbol</label>
+                <input 
+                    type="text" 
+                    id="stock_name" 
+                    name="stock_name" 
+                    placeholder="e.g., AAPL" 
+                    required
+                >
+            </div>
+            
+            <div class="form-group">
+                <label for="quantity">Quantity</label>
+                <input 
+                    type="number" 
+                    id="quantity" 
+                    name="quantity" 
+                    placeholder="Number of shares" 
+                    min="1" 
+                    required
+                >
+            </div>
+            
+            <div class="form-group">
+                <label for="buy_price">Buy Price ($)</label>
+                <input 
+                    type="number" 
+                    id="buy_price" 
+                    name="buy_price" 
+                    placeholder="Price per share" 
+                    step="0.01" 
+                    required
+                >
+            </div>
+            
+            <div class="form-group">
+                <label for="current_price">Current Price ($)</label>
+                <input 
+                    type="number" 
+                    id="current_price" 
+                    name="current_price" 
+                    placeholder="Current market price" 
+                    step="0.01" 
+                    required
+                >
+            </div>
+        </div>
+        <input type="submit" value="Add Stock">
+    </form>
+    
+    {% if summary %}
+    <h2 style="margin-top: 2rem;">Portfolio Summary</h2>
+    <div class="summary">
+        <div class="summary-item">
+            <span>Total Investment:</span>
+            <span>${{ summary.total_investment }}</span>
+        </div>
+        <div class="summary-item">
+            <span>Current Value:</span>
+            <span>${{ summary.total_current_value }}</span>
+        </div>
+        <div class="summary-item">
+            <span>Total Profit/Loss:</span>
+            <span class="{% if summary.total_profit_loss >= 0 %}profit{% else %}loss{% endif %}">
+                {% if summary.total_profit_loss >= 0 %}+{% endif %}${{ summary.total_profit_loss }}
+            </span>
+        </div>
+    </div>
+    {% endif %}
+    
+    <h2 style="margin-top: 2rem;">Your Stocks</h2>
+    {% if portfolio %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Stock</th>
+                    <th>Quantity</th>
+                    <th>Buy Price</th>
+                    <th>Current Price</th>
+                    <th>Profit/Loss</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stock in portfolio %}
+                    <tr>
+                        <td><strong>{{ stock.stock_name }}</strong></td>
+                        <td>{{ stock.quantity }}</td>
+                        <td>${{ stock.buy_price }}</td>
+                        <td>${{ stock.current_price }}</td>
+                        <td class="{% if stock.profit_loss >= 0 %}profit{% else %}loss{% endif %}">
+                            {% if stock.profit_loss >= 0 %}+{% endif %}${{ stock.profit_loss }}
+                        </td>
+                        <td>
+                            <a href="{{ url_for('delete_stock', id=stock.id) }}" class="btn btn-danger" onclick="return confirm('Delete this stock?');">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p style="text-align: center; color: #666; margin-top: 2rem;">No stocks in your portfolio yet. Add one above!</p>
+    {% endif %}
+</div>
+{% endblock %}

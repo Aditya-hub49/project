@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Home - FinTrackr{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Welcome to FinTrackr</h1>
+    <p>Your personal financial portfolio tracker</p>
+    <p>Track your stock investments, monitor profit/loss, and manage your portfolio efficiently.</p>
+    
+    <div class="hero-buttons">
+        <a href="{{ url_for('register') }}">Get Started</a>
+        <a href="{{ url_for('login') }}">Sign In</a>
+    </div>
+</div>
+
+<div class="card" style="margin-top: 3rem;">
+    <h2>Features</h2>
+    <ul style="line-height: 2; color: #555;">
+        <li>✓ Create a secure account with encryption</li>
+        <li>✓ Add and track multiple stocks in your portfolio</li>
+        <li>✓ Calculate profit/loss for each stock</li>
+        <li>✓ View comprehensive portfolio summary</li>
+        <li>✓ Manage losing stocks with break-even calculations</li>
+        <li>✓ Delete stocks from your portfolio</li>
+        <li>✓ Manage your account settings</li>
+    </ul>
+</div>
+{% endblock %}
