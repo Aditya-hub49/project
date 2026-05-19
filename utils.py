@@ -1,6 +1,8 @@
 #
 # utils.py
 #
+# Last updated: 2026-05-19
+#
 # This file holds all your business logic and calculations,
 # keeping your app.py clean and focused on routes.
 #
